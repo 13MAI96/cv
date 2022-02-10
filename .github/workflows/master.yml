@@ -1,0 +1,32 @@
+on:
+  pull_request:
+    branches: [ master ]
+
+name: 🚀 Deploy website on merge
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js 14
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+      
+    - name: 🔨 Build Project
+      run: |
+        npm install
+        npm run build
+    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.2.0
+      with:
+        server: ${{ secrets.FTP_HOST_13MAI96 }}
+        username: ${{ secrets.FTP_USER_13MAI96 }}
+        password: ${{ secrets.FTP_PASS_13MAI96 }}
+        local-dir: dist/cv/
+        server-dir: ./
